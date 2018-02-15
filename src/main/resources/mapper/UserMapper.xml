@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tom.dao.UserMapper">
+    <resultMap id="UserResultMap" type="com.tom.model.User">
+        <id column="user_id" property="id" jdbcType="INTEGER"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <collection property="roles" ofType="com.tom.model.Role">
+            <id property="id" column="role_id"/>
+            <result property="name" column="role_name"/>
+        </collection>
+    </resultMap>
+
+    <select id="findByUsernameAndPassword" parameterType="User" resultMap="UserResultMap">
+        SELECT
+          u.`id` AS user_id,
+          u.`username`,
+          u.`password`,
+          r.`id` AS role_id,
+          r.`name` AS role_name
+        FROM
+          `user` u
+          LEFT JOIN `user_role` ur
+            ON u.`id` = ur.`user_id`
+          LEFT JOIN `role` r
+            ON r.`id` = ur.`role_id`
+        <where>
+            u.`username` = #{username}
+            and u.`password` = #{password}
+        </where>
+    </select>
+
+    <select id="findByUsername" parameterType="string" resultMap="UserResultMap">
+        SELECT
+          u.`id` AS user_id,
+          u.`username`,
+          u.`password`,
+          r.`id` AS role_id,
+          r.`name` AS role_name
+        FROM
+          `user` u
+          LEFT JOIN `user_role` ur
+            ON u.`id` = ur.`user_id`
+          LEFT JOIN `role` r
+            ON r.`id` = ur.`role_id`
+        <where>
+            u.`username` = #{username}
+        </where>
+    </select>
+
+</mapper>
