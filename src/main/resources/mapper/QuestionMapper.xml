@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tom.dao.QuestionMapper">
+
+    <resultMap id="BaseResultMap" type="com.tom.model.Question">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="askDate" jdbcType="TIMESTAMP" property="askDate"/>
+        <result column="userId" jdbcType="INTEGER" property="userId"/>
+        <result column="answer" jdbcType="VARCHAR" property="answer"/>
+    </resultMap>
+
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.tom.model.Question">
+        <result column="content" jdbcType="LONGVARCHAR" property="content"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, title, askDate, userId, answer
+    </sql>
+
+    <sql id="Blob_Column_List">
+        content
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from question
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        DELETE FROM question
+        WHERE id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="Question" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO question (title, askDate, userId, answer, content
+        )
+        VALUES (#{title,jdbcType=VARCHAR}, #{askDate,jdbcType=TIMESTAMP},
+                #{userId,jdbcType=INTEGER}, #{answer,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR}
+        )
+    </insert>
+
+    <insert id="insertSelective" parameterType="Question" keyProperty="id" useGeneratedKeys="true">
+        insert into question
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">
+                title,
+            </if>
+            <if test="askDate != null">
+                askDate,
+            </if>
+            <if test="userId != null">
+                userId,
+            </if>
+            <if test="answer != null">
+                answer,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="askDate != null">
+                #{askDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="answer != null">
+                #{answer,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="Question">
+        update question
+        <set>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="askDate != null">
+                askDate = #{askDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userId != null">
+                userId = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="answer != null">
+                answer = #{answer,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="Question">
+        UPDATE question
+        SET title   = #{title,jdbcType=VARCHAR},
+            askDate = #{askDate,jdbcType=TIMESTAMP},
+            userId  = #{userId,jdbcType=INTEGER},
+            answer  = #{answer,jdbcType=VARCHAR},
+            content = #{content,jdbcType=LONGVARCHAR}
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="Question">
+        UPDATE question
+        SET title   = #{title,jdbcType=VARCHAR},
+            askDate = #{askDate,jdbcType=TIMESTAMP},
+            userId  = #{userId,jdbcType=INTEGER},
+            answer  = #{answer,jdbcType=VARCHAR}
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

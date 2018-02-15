@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 @Mapper
-public interface UserMapper {
+public interface UserMapper extends BasicMapper<User> {
 
     User findByUsernameAndPassword(User user);
 

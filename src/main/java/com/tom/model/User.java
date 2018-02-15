@@ -1,21 +1,23 @@
 package com.tom.model;
 
-import java.io.Serializable;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * 用户账户 POJO
+ */
 @Getter
 @Setter
 @ToString
-public class User implements Serializable {
+public class User {
 
-    private static final long serialVersionUID = -3658273734829759865L;
-
-    private int id;
-    private String username;
-    private String password;
-    private List<Role> roles;
-
+    private Integer id;
+    private String username;   // 用户名
+    private String password;   // 密码
+    private String name;       // 姓名
+    private Integer sex;       // 性别 1:男 2:女
+    private Integer age;       // 年龄
+    private List<Role> roles;  // 该账户的权限
 }

@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>登录</title>
     <th:block th:replace="layout/header"/>
+    <title>登录</title>
+    <th:block th:replace="layout/script"/>
 </head>
 <body>
-<div>
-</div>
 <div>
     <form action="/login" method="post">
         <table>
@@ -27,4 +26,21 @@
     </form>
 </div>
 </body>
+<!--
+
+    thymeleaf 内联 js 需要使用 th:inline="javascript
+
+    /*<![CDATA[*//*]]>*/ 是为了防止没有渲染模板的情况下浏览器无法正常打开 html
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    $(function () {
+        alert("hello");
+    });
+
+    /*]]>*/
+</script>
+
+-->
 </html>

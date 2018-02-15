@@ -1,16 +1,17 @@
 package com.tom.model;
 
-import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
+/**
+ * 用户角色 POJO
+ */
 @Getter
 @Setter
-public class Role implements Serializable {
+@ToString
+public class Role {
 
-    private static final long serialVersionUID = -3197678051582892163L;
-
-    private int id;
-    private String name;
-
+    private Integer id;
+    private String name;  // 角色名称 存在两种 系统管理员（ROLE_ADMIN）和普通用户（ROLE_USER）
 }

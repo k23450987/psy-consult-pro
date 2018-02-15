@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tom.dao.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.tom.model.User">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" jdbcType="INTEGER"/>
+        <result column="age" property="age" jdbcType="INTEGER"/>
+    </resultMap>
+
     <resultMap id="UserResultMap" type="com.tom.model.User">
         <id column="user_id" property="id" jdbcType="INTEGER"/>
         <result column="username" property="username" jdbcType="VARCHAR"/>
@@ -12,19 +21,111 @@
         </collection>
     </resultMap>
 
+    <sql id="Base_Column_List">
+        id, username, password, name, sex, age
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from user
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        DELETE FROM user
+        WHERE id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="User" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO user (username, password, name, sex, age)
+        VALUES (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+                #{name,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, #{age,jdbcType=INTEGER})
+    </insert>
+
+    <insert id="insertSelective" parameterType="User" keyProperty="id" useGeneratedKeys="true">
+        insert into user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="username != null">
+                username,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="sex != null">
+                sex,
+            </if>
+            <if test="age != null">
+                age,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                #{sex,jdbcType=INTEGER},
+            </if>
+            <if test="age != null">
+                #{age,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="User">
+        update user
+        <set>
+            <if test="username != null">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                sex = #{sex,jdbcType=INTEGER},
+            </if>
+            <if test="age != null">
+                age = #{age,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="User">
+        UPDATE user
+        SET username = #{username,jdbcType=VARCHAR},
+            password = #{password,jdbcType=VARCHAR},
+            name     = #{name,jdbcType=VARCHAR},
+            sex      = #{sex,jdbcType=INTEGER},
+            age      = #{age,jdbcType=INTEGER}
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+
     <select id="findByUsernameAndPassword" parameterType="User" resultMap="UserResultMap">
         SELECT
-          u.`id` AS user_id,
-          u.`username`,
-          u.`password`,
-          r.`id` AS role_id,
-          r.`name` AS role_name
+        u.`id` AS user_id,
+        u.`username`,
+        u.`password`,
+        r.`id` AS role_id,
+        r.`name` AS role_name
         FROM
-          `user` u
-          LEFT JOIN `user_role` ur
-            ON u.`id` = ur.`user_id`
-          LEFT JOIN `role` r
-            ON r.`id` = ur.`role_id`
+        `user` u
+        LEFT JOIN `user_role` ur
+        ON u.`id` = ur.`user_id`
+        LEFT JOIN `role` r
+        ON r.`id` = ur.`role_id`
         <where>
             u.`username` = #{username}
             and u.`password` = #{password}
@@ -33,20 +134,19 @@
 
     <select id="findByUsername" parameterType="string" resultMap="UserResultMap">
         SELECT
-          u.`id` AS user_id,
-          u.`username`,
-          u.`password`,
-          r.`id` AS role_id,
-          r.`name` AS role_name
+        u.`id` AS user_id,
+        u.`username`,
+        u.`password`,
+        r.`id` AS role_id,
+        r.`name` AS role_name
         FROM
-          `user` u
-          LEFT JOIN `user_role` ur
-            ON u.`id` = ur.`user_id`
-          LEFT JOIN `role` r
-            ON r.`id` = ur.`role_id`
+        `user` u
+        LEFT JOIN `user_role` ur
+        ON u.`id` = ur.`user_id`
+        LEFT JOIN `role` r
+        ON r.`id` = ur.`role_id`
         <where>
             u.`username` = #{username}
         </where>
     </select>
-
 </mapper>
