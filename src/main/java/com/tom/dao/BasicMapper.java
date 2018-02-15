@@ -1,5 +1,9 @@
 package com.tom.dao;
 
+/**
+ * 基础 Mapper
+ * @param <T> 泛型
+ */
 public interface BasicMapper<T> {
 
     int deleteByPrimaryKey(Integer id);
