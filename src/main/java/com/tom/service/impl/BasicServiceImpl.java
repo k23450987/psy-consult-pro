@@ -2,16 +2,17 @@ package com.tom.service.impl;
 
 import com.tom.dao.BasicMapper;
 import com.tom.service.BasicService;
-import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 基础服务实现类
+ *
  * @param <T> 泛型
  */
-public class BasicServiceImpl<T> implements BasicService<T> {
+public abstract class BasicServiceImpl<T> implements BasicService<T> {
 
-    @Resource
-    private BasicMapper<T> dao;
+    @Autowired
+    protected BasicMapper<T> dao;
 
     @Override
     public int delete(Integer id) {

@@ -1,11 +1,11 @@
 package com.tom.service.impl;
 
-import com.tom.dao.UserMapper;
 import com.tom.model.Role;
 import com.tom.model.User;
+import com.tom.service.UserService;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,12 +17,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
  */
 public class SpringSecUserServiceImpl implements UserDetailsService {
 
-    @Resource
-    private UserMapper dao;
+    @Autowired
+    private UserService userService;
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        User user = dao.findByUsername(s);
+        User user = userService.findByUsername(s);
         if (user == null) {
             System.out.println("User not found");
             throw new UsernameNotFoundException("Username not found");

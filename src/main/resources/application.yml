@@ -6,6 +6,8 @@ spring:
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
+  main:
+    banner-mode: "off"
 mybatis:
   # mapper 路径
   mapperLocations: classpath:mapper/*.xml

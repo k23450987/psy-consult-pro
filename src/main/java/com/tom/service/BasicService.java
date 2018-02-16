@@ -2,6 +2,7 @@ package com.tom.service;
 
 /**
  * 基础服务类
+ *
  * @param <T> 泛型
  */
 public interface BasicService<T> {
