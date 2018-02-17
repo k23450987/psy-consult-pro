@@ -28,11 +28,23 @@
         id, username, password, name, sex, age
     </sql>
 
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    <select id="selectByPrimaryKey" resultMap="UserResultMap" parameterType="java.lang.Integer">
         select
-        <include refid="Base_Column_List"/>
-        from user
-        where id = #{id,jdbcType=INTEGER}
+            u.`id` AS user_id,
+            u.`username`,
+            u.`password`,
+            u.`name`,
+            u.`sex`,
+            u.`age`,
+            r.`id` AS role_id,
+            r.`name` AS role_name
+        FROM
+            `user` u
+            LEFT JOIN `user_role` ur
+                ON u.`id` = ur.`user_id`
+            LEFT JOIN `role` r
+                ON r.`id` = ur.`role_id`
+        where user_id = #{id,jdbcType=INTEGER}
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
@@ -154,5 +166,23 @@
         <where>
             u.`username` = #{username}
         </where>
+    </select>
+
+    <select id="findUsers" resultMap="UserResultMap">
+        SELECT
+        u.`id` AS user_id,
+        u.`username`,
+        u.`password`,
+        u.`name`,
+        u.`sex`,
+        u.`age`,
+        r.`id` AS role_id,
+        r.`name` AS role_name
+        FROM
+        `user` u
+        LEFT JOIN `user_role` ur
+        ON u.`id` = ur.`user_id`
+        LEFT JOIN `role` r
+        ON r.`id` = ur.`role_id`
     </select>
 </mapper>

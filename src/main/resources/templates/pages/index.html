@@ -9,7 +9,7 @@
 </head>
 <body>
 <div>
-    <span style="color: red">Spring Boot say: ${hello}</span>
+    <span style="color: red" th:text="'Spring Boot say: hello ' + ${username}">Spring Boot say: ${hello}</span>
     <br/>
     <span style="color: limegreen">Status: OK</span>
     <span sec:authorize="hasRole('ROLE_ADMIN')">

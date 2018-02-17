@@ -14,7 +14,91 @@
 <!-- Page Content -->
 <!-- ============================================================== -->
 <div id="page-wrapper">
-
+    <div class="col-sm-12">
+        <div class="content-wrap">
+            <div class="p-20 row">
+                <div class="col-sm-6">
+                    <h2 class="m-t-0">用户管理</h2></div>
+                <div class="col-sm-6">
+                    <ul class="side-icon-text pull-right">
+                        <li><a href="javascript:void(0)" onclick="user_add()"><span
+                            class="circle circle-sm bg-success di"><i
+                            class="ti-plus"></i></span><span>添加用户</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="table-responsive">
+            <table id="dg" class="table table-bordered table-striped"></table>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <nav class="text-right">
+            <ul id="dg-pagination" class="pagination"></ul>
+        </nav>
+    </div>
+    <!-- 模态框 -->
+    <!-- 添加记录 -->
+    <div class="modal fade" id="modal-add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"><i class="icon-list-alt"></i> 添加用户</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="form-user" class="form-horizontal">
+                        <input id="id" name="id" type="hidden"/>
+                        <div class="form-group">
+                            <label class="col-md-12" for="username">用户名</label>
+                            <div class="col-md-12">
+                                <input type="text" id="username" name="username" class="form-control" placeholder="请输入用户名"/> </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-12" for="password">密码</label>
+                            <div class="col-md-12">
+                                <input id="password" name="password" type="password" class="form-control" placeholder="请输入密码"/> </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-12" for="name">姓名</label>
+                            <div class="col-md-12">
+                                <input type="email" id="name" name="name" class="form-control" placeholder="请输入姓名"/> </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-12">性别</label>
+                            <div class="col-sm-12">
+                                <select class="form-control" id="sex" name="sex">
+                                    <option value="1">男</option>
+                                    <option value="2">女</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-12" for="age">年龄</label>
+                            <div class="col-md-12">
+                                <input type="email" id="age" name="age" class="form-control" placeholder="请输入年龄"/> </div>
+                        </div>
+                        <!--<div class="form-group">-->
+                            <!--<label class="col-sm-12">用户角色</label>-->
+                            <!--<div class="col-sm-12">-->
+                                <!--<select class="form-control" name="role" id="role">-->
+                                    <!--<option value="1">管理员</option>-->
+                                    <!--<option value="2">普通用户</option>-->
+                                <!--</select>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="user_save()">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- /.container-fluid -->
     <footer class="footer text-center"> 2017 &copy; 版权所有</footer>
 </div>
@@ -22,5 +106,150 @@
 <!-- End Page Content -->
 <!-- ============================================================== -->
 </body>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    $(function () {
+        $('#dg').twbsDatagrid({
+            method: 'get',
+            pageSize: 10,
+            url: /*[[@{/users}]]*/ + '/users',
+            columns: [{
+                field: 'username',
+                title: '用户名'
+            }, {
+                field: 'name',
+                title: '姓名'
+            }, {
+                field: 'roles',
+                title: '用户角色',
+                formatter: function (val, row) {
+                    if (row.roles.length > 0) {
+                        return (row.roles[0].id == 1 ? "系统管理员" : "普通用户");
+                    } else {
+                        return "无";
+                    }
+                }
+            }, {
+                field: 'sex',
+                title: '性别',
+                formatter: function (val, row) {
+                    if (row.sex == 1) {
+                        return '男';
+                    } else {
+                        return '女';
+                    }
+                }
+            }, {
+                field: 'age',
+                title: '年龄'
+            }, {
+                field: 'operation',
+                title: '操作',
+                formatter: function (val, row) {
+                    // 拼接html
+                    var btns = '';
+                    // btns += '<a href="' + [[@{/user?id=}]] + row.id + '" class="label label-info m-r-5">编辑</a>';
+                    if (row.id != 1) {
+                        btns += '<a href="javascript:void(0)" class="label label-info m-r-5" onclick="user_info(' + row.id + ')">编辑</a>';
+                        btns += '<a href="javascript:void(0)" class="label label-warning m-r-5" onclick="user_del(' + row.id + ')">删除</a>';
+                    } else {
+                        return "无";
+                    }
+                    return btns;
+                }
+            }]
+        });
+    });
+
+    function user_add() {
+        $("#form-user")[0].reset();
+        $("#modal-add").modal('show');
+    }
+
+    function user_save() {
+        var obj = $('#form-user').serializeObject();
+        if (!obj.id) {
+            if (obj.username && obj.password && obj.name) {
+                $.ajax({
+                    type: "POST",
+                    url: [[@{/user}]],
+                    data: obj,
+                    dataType: "json",
+                        success: function (data) {
+                        if (data.success) {
+                            $("#modal-add").modal('hide');
+                            $('#dg').twbsDatagrid('reload');
+                        } else {
+                            if (data.msg) {
+                                alert(data.msg);
+                            } else {
+                                alert("服务器正忙，请稍后再试。");
+                            }
+                        }
+                    }
+                });
+            } else {
+                alert("请确认信息填写完整！");
+            }
+        } else {
+            if (obj.username && obj.password && obj.name) {
+                $.ajax({
+                    type: "PUT",
+                    url: [[@{/user}]],
+                    data: obj,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.success) {
+                            $("#modal-add").modal('hide');
+                            $('#dg').twbsDatagrid('reload');
+                        } else {
+                            if (data.msg) {
+                                alert(data.msg);
+                            } else {
+                                alert("服务器正忙，请稍后再试。");
+                            }
+                        }
+                    }
+                });
+            } else {
+                alert("请确认信息填写完整！");
+            }
+        }
+    }
+
+    function user_info(id) {
+        $.ajax({
+            type: "GET",
+            url: [[@{/user?id=}]] + id,
+            dataType: "json",
+                success: function (data) {
+                if (data.success) {
+                    var obj = data.data;
+                    for (var name in obj) {
+                        $('#form-user').find('[name="' + name + '"]').val(obj[name]);
+                    }
+                    $("#modal-add").modal('show');
+                }
+            }
+        });
+    }
+
+    function user_del(id) {
+        $.ajax({
+            type: "DELETE",
+            url: [[@{/user?id=}]] + id,
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    $('#dg').twbsDatagrid('reload');
+                }
+            }
+        });
+    }
+
+    /*]]>*/
+</script>
 
 </html>

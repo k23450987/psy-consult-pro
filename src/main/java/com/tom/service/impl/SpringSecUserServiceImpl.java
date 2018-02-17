@@ -5,6 +5,7 @@ import com.tom.model.User;
 import com.tom.service.UserService;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 /**
  * 实现 Spring Security 的 UserDetailsService 接口
  */
+@CommonsLog
 public class SpringSecUserServiceImpl implements UserDetailsService {
 
     @Autowired
@@ -24,7 +26,7 @@ public class SpringSecUserServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user = userService.findByUsername(s);
         if (user == null) {
-            System.out.println("User not found");
+            log.error("User not found");
             throw new UsernameNotFoundException("Username not found");
         }
         // 封装成 Spring Security 的用户类

@@ -1,6 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <meta charset="UTF-8"/>
-<link rel="icon" type="image/x-icon" th:href="@{${#httpServletRequest.getContextPath()} + 'images/backend/favicon.png'}"/>
+<link rel="icon" type="image/x-icon" th:href="@{/images/backend/favicon.png}"/>
 <link th:href="@{/assets/bootstrap/dist/css/bootstrap.min.css}" rel="stylesheet"/>
 <!-- Menu CSS -->
 <link th:href="@{/assets/css/sidebar-nav.min.css}" rel="stylesheet"/>
@@ -21,5 +21,9 @@
 <!--Wave Effects -->
 <script th:src="@{/assets/js/waves.js}"></script>
 <!-- Custom Theme JavaScript -->
-<script th:src="@{/assets/js/custom.min.js}"></script>
+<script th:src="@{/assets/js/custom.js}"></script>
+<!-- jquery twbsPagination JavaScript -->
+<script th:src="@{/assets/js/jquery.twbsPagination.min.js}"></script>
+<!-- jquery twbsDatagrid JavaScript -->
+<script th:src="@{/assets/js/jquery.twbsDatagrid.js}"></script>
 </html>
