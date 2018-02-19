@@ -14,7 +14,27 @@
 <!-- Page Content -->
 <!-- ============================================================== -->
 <div id="page-wrapper">
-
+    <div class="container-fluid">
+        <div class="row bg-title">
+            <!-- .page title -->
+            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                <h4 class="page-title">首页</h4>
+            </div>
+        </div>
+        <!-- .row -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="white-box">
+                    <div><h1>欢迎您，尊敬的管理员！</h1></div>
+                    <br/>
+                    <div>
+                        今天是 <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2018</span> 年 <span th:text="${#dates.format(#dates.createNow(), 'MM')}">2018</span> 月 <span th:text="${#dates.format(#dates.createNow(), 'dd')}">2018</span> 日
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- .row -->
+    </div>
     <!-- /.container-fluid -->
     <footer class="footer text-center"> 2017 &copy; 版权所有</footer>
 </div>

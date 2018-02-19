@@ -108,4 +108,10 @@
             clickTime   = #{clickTime,jdbcType=INTEGER}
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="findArticles" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+            <include refid="Base_Column_List"/>
+        from article
+    </select>
 </mapper>

@@ -10,6 +10,11 @@
 <link th:href="@{/assets/css/style.css}" rel="stylesheet"/>
 <!-- color CSS -->
 <link th:href="@{/assets/css/colors/megna-dark.css}" id="theme" rel="stylesheet"/>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var contextPath = /*[[@{/}]]*/ '';
+    /*]]>*/
+</script>
 <!-- All Jquery -->
 <script th:src="@{/assets/js/jquery.min.js}"></script>
 <!-- Bootstrap Core JavaScript -->
@@ -26,4 +31,8 @@
 <script th:src="@{/assets/js/jquery.twbsPagination.min.js}"></script>
 <!-- jquery twbsDatagrid JavaScript -->
 <script th:src="@{/assets/js/jquery.twbsDatagrid.js}"></script>
+<!-- nicedit -->
+<script th:src="@{/assets/js/nicedit/nicEdit.js}"></script>
+<!-- base64 -->
+<script th:src="@{/assets/js/base64.js}"></script>
 </html>

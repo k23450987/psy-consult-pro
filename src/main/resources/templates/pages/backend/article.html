@@ -6,6 +6,12 @@
     <th:block th:replace="layout/backend/header"/>
 </head>
 
+<style>
+    b,strong {
+        font-weight: bold !important;
+    }
+</style>
+
 <body class="fix-header">
 
 <th:block th:replace="layout/backend/common"/>
@@ -14,7 +20,73 @@
 <!-- Page Content -->
 <!-- ============================================================== -->
 <div id="page-wrapper">
-
+    <div class="container-fluid">
+        <div class="row bg-title">
+            <!-- .page title -->
+            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                <h4 class="page-title">新闻管理</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="content-wrap">
+                    <div class="p-20 row">
+                        <div class="col-sm-6">
+                            <h2 class="m-t-0">新闻管理</h2></div>
+                        <div class="col-sm-6">
+                            <ul class="side-icon-text pull-right">
+                                <li>
+                                    <a href="javascript:void(0)" onclick="article_add()"><span class="circle circle-sm bg-success di"><i class="ti-plus"></i></span><span>发布</span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="table-responsive">
+                    <table id="dg" class="table color-table inverse-table table-bordered table-striped"></table>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <nav class="text-right">
+                    <ul id="dg-pagination" class="pagination"></ul>
+                </nav>
+            </div>
+        </div>
+        <!-- 模态框 -->
+        <!-- 添加记录 -->
+        <div class="modal fade" id="modal-add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document" style="width: 800px;height: 600px">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel"><i class="icon-list-alt"></i> <span id="modal-title">新闻</span></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="form-article" class="form-horizontal">
+                            <input id="id" name="id" type="hidden"/>
+                            <div class="form-group">
+                                <label class="col-md-12" for="title">题目</label>
+                                <div class="col-md-12">
+                                    <input type="text" id="title" name="title" class="form-control" placeholder="请输入题目"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <textarea id="nicedit" cols="50" style="width: 770px;height: 300px;"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" onclick="article_save()">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- /.container-fluid -->
     <footer class="footer text-center"> 2017 &copy; 版权所有</footer>
 </div>
@@ -22,5 +94,157 @@
 <!-- End Page Content -->
 <!-- ============================================================== -->
 </body>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var nicedit;
+
+    $(function () {
+        $('#modal-add').on('show.bs.modal', function (e) {
+            if(!nicedit) {
+                nicedit = new nicEditor({buttonList : ['fontSize','fontFamily','bold','italic','underline','left','center','right'], maxHeight : 300}).panelInstance('nicedit');
+            }
+        });
+
+        $('#modal-add').on('hidden.bs.modal', function (e) {
+            if(nicedit) {
+                nicedit.removeInstance('nicedit');
+                nicedit = null;
+            }
+            $("#title").val("");
+            $("#nicedit").val("");
+        });
+
+        $('#dg').twbsDatagrid({
+            method: 'get',
+            pageSize: 10,
+            url: /*[[@{/articles}]]*/ + '/articles',
+            columns: [{
+                field: 'title',
+                title: '题目'
+            }, {
+                field: 'releaseDate',
+                title: '发布时间'
+            }, {
+                field: 'clickTime',
+                title: '点击数',
+                formatter: function (val, row) {
+                    return row.clickTime;
+                }
+            }, {
+                field: 'operation',
+                title: '操作',
+                formatter: function (val, row) {
+                    // 拼接html
+                    var btns = '';
+                    // btns += '<a href="' + [[@{/article?id=}]] + row.id + '" class="label label-info m-r-5">编辑</a>';
+                    btns += '<a href="javascript:void(0)" class="label label-info m-r-5" onclick="article_info(' + row.id + ')">编辑</a>';
+                    btns += '<a href="javascript:void(0)" class="label label-warning m-r-5" onclick="article_del(' + row.id + ')">删除</a>';
+                    return btns;
+                }
+            }]
+        });
+    });
+
+    function article_add() {
+        $("#modal-add").modal('show');
+    }
+
+    function article_save() {
+        var obj = {
+            "id": $("#id").val(),
+            "title": $("#title").val(),
+            "releaseDate": new Date(),
+            "clickTime": 0,
+            "content": Base64.encode($(".nicEdit-main").html()),
+        };
+        if (!obj.id) {
+            if (obj.title) {
+                $.ajax({
+                    type: "POST",
+                    url: [[@{/article}]],
+                    data: obj,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.success) {
+                            $("#modal-add").modal('hide');
+                            $('#dg').twbsDatagrid('reload');
+                        } else {
+                            if (data.msg) {
+                                alert(data.msg);
+                            } else {
+                                alert("服务器正忙，请稍后再试。");
+                            }
+                        }
+                    }
+                });
+            } else {
+                alert("请输入标题！");
+            }
+        } else {
+            if (obj.title) {
+                delete obj.clickTime;
+                $.ajax({
+                    type: "PUT",
+                    url: [[@{/article}]],
+                    data: obj,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.success) {
+                            $("#modal-add").modal('hide');
+                            $('#dg').twbsDatagrid('reload');
+                        } else {
+                            if (data.msg) {
+                                alert(data.msg);
+                            } else {
+                                alert("服务器正忙，请稍后再试。");
+                            }
+                        }
+                    }
+                });
+            } else {
+                alert("请输入标题！");
+            }
+        }
+    }
+
+    function article_info(id) {
+        $.ajax({
+            type: "GET",
+            url: [[@{/article?id=}]] + id,
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    var obj = data.data;
+                    $("#id").val(obj.id);
+                    $("#title").val(obj.title);
+                    nicedit = new nicEditor({
+                        buttonList: ['fontSize', 'fontFamily', 'bold', 'italic', 'underline', 'left', 'center', 'right'],
+                        maxHeight: 300
+                    }).panelInstance('nicedit');
+                    if (obj.content) {
+                        $(".nicEdit-main").html(Base64.decode(obj.content));
+                    }
+                    $("#modal-add").modal('show');
+                }
+            }
+        });
+    }
+
+    function article_del(id) {
+        $.ajax({
+            type: "DELETE",
+            url: [[@{/article?id=}]] + id,
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    $('#dg').twbsDatagrid('reload');
+                }
+            }
+        });
+    }
+
+    /*]]>*/
+</script>
 
 </html>

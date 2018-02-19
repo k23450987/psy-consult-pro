@@ -6,6 +6,7 @@
     <th:block th:replace="layout/header"/>
     <title>Welcome</title>
     <th:block th:replace="layout/script"/>
+    <script th:src="@{/assets/js/nicedit/nicEdit.js}"></script>
 </head>
 <body>
 <div>
@@ -15,7 +16,15 @@
     <span sec:authorize="hasRole('ROLE_ADMIN')">
         This content is only shown to administrators.
     </span>
+    <textarea id="nicedit" cols="50" style="width: 800px;height: 300px"></textarea>
 </div>
 <div><span><a href="/logout">登出</a></span></div>
 </body>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(function(){
+        new nicEditor({buttonList : ['bold','italic','underline','left','center','right'], maxHeight : 300}).panelInstance('nicedit');
+    });
+    /*]]>*/
+</script>
 </html>

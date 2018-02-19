@@ -3,6 +3,7 @@ package com.tom.service.impl;
 import com.tom.dao.QuestionMapper;
 import com.tom.model.Question;
 import com.tom.service.QuestionService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,5 +18,10 @@ public class QuestionServiceImpl extends BasicServiceImpl<Question> implements Q
     @Override
     public int updateWithBLOBs(Question record) {
         return questionMapper.updateByPrimaryKeyWithBLOBs(record);
+    }
+
+    @Override
+    public List<Question> findQuestions() {
+        return questionMapper.findQuestions();
     }
 }

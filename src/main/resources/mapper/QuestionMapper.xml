@@ -122,4 +122,10 @@
             answer  = #{answer,jdbcType=VARCHAR}
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="findQuestions" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from question
+    </select>
 </mapper>

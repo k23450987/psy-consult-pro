@@ -14,7 +14,71 @@
 <!-- Page Content -->
 <!-- ============================================================== -->
 <div id="page-wrapper">
-
+    <div class="container-fluid">
+        <div class="row bg-title">
+            <!-- .page title -->
+            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                <h4 class="page-title">问答管理</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="content-wrap">
+                    <div class="p-20 row">
+                        <div class="col-sm-6">
+                            <h2 class="m-t-0">问答管理</h2></div>
+                        <!--<div class="col-sm-6">-->
+                            <!--<ul class="side-icon-text pull-right">-->
+                                <!--<li>-->
+                                    <!--<a href="javascript:void(0)" onclick="question_add()"><span class="circle circle-sm bg-success di"><i class="ti-plus"></i></span><span>新增用户</span></a>-->
+                                <!--</li>-->
+                            <!--</ul>-->
+                        <!--</div>-->
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="table-responsive">
+                    <table id="dg" class="table color-table inverse-table table-bordered table-striped"></table>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <nav class="text-right">
+                    <ul id="dg-pagination" class="pagination"></ul>
+                </nav>
+            </div>
+        </div>
+        <div class="modal fade" id="modal-add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document" style="width: 800px;height: 600px">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel"><i class="icon-list-alt"></i> <span id="modal-title">回复</span></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="form-question" class="form-horizontal">
+                            <input id="id" type="hidden"/>
+                            <div class="form-group">
+                                <h3 class="col-md-12" id="title"></h3>
+                                <div class="white-box col-md-12" id="content"></div>
+                                <h4 class="col-md-12">回复：</h4>
+                                <div class="col-md-12">
+                                    <textarea id="answer" class="col-md-12 form-control" style="resize: none" cols="50" rows="5" placeholder="最多可输入100字" oninput="changeTextCount()"></textarea>
+                                    <div class="pull-right">
+                                        <span id="text-count">0</span>/100
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" onclick="question_save()">回复</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- /.container-fluid -->
     <footer class="footer text-center"> 2017 &copy; 版权所有</footer>
 </div>
@@ -22,5 +86,135 @@
 <!-- End Page Content -->
 <!-- ============================================================== -->
 </body>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    $(function () {
+        $('#dg').twbsDatagrid({
+            method: 'get',
+            pageSize: 10,
+            url: /*[[@{/questions}]]*/ + '/questions',
+            columns: [{
+                field: 'title',
+                title: '题目'
+            }, {
+                field: 'askDate',
+                title: '提问时间'
+            }, {
+                field: 'userId',
+                title: '作者',
+                formatter: function (val, row) {
+                    var result = "";
+                    if (row.userId) {
+                        $.ajax({
+                            type: "GET",
+                            url: [[@{/user?id=}]] + row.userId,
+                            async: false,
+                            dataType: "json",
+                            success: function (data) {
+                                if (data.success) {
+                                    result =  data.data.name;
+                                }
+                            }
+                        });
+                    }
+                    return result;
+                }
+            }, {
+                field: 'answer',
+                title: '回复状态',
+                formatter: function (val, row) {
+                    if (row.answer) {
+                        return "已回复";
+                    } else {
+                        return "未回复";
+                    }
+                }
+            }, {
+                field: 'operation',
+                title: '操作',
+                formatter: function (val, row) {
+                    // 拼接html
+                    var btns = '';
+                    // btns += '<a href="' + [[@{/question?id=}]] + row.id + '" class="label label-info m-r-5">编辑</a>';
+                    if (!row.answer) {
+                        btns += '<a href="javascript:void(0)" class="label label-info m-r-5" onclick="question_info(' + row.id + ')">回复</a>';
+                    }
+                    btns += '<a href="javascript:void(0)" class="label label-warning m-r-5" onclick="question_del(' + row.id + ')">删除</a>';
+                    return btns;
+                }
+            }]
+        });
+    });
+
+    function changeTextCount() {
+        var len = $("#answer").val().length;
+        $('#text-count').text(len);
+    }
+
+    function question_info(id) {
+        $.ajax({
+            type: "GET",
+            url: [[@{/question?id=}]] + id,
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    var obj = data.data;
+                    $('#id').val(obj.id);
+                    $('#title').text(obj.title);
+                    $('#content').text(obj.content);
+                    $("#modal-add").modal('show');
+                } else {
+                    alert("服务器正忙，请稍后再试。");
+                }
+            }
+        });
+    }
+
+    function question_del(id) {
+        $.ajax({
+            type: "DELETE",
+            url: [[@{/question?id=}]] + id,
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    $('#dg').twbsDatagrid('reload');
+                }
+            }
+        });
+    }
+
+    function question_save() {
+        var obj = {
+            "id": $('#id').val(),
+            "answer": $('#answer').val()
+        };
+        if (obj.answer.length <= 100) {
+            $.ajax({
+                type: "PUT",
+                url: [[@{/question}]],
+                data: obj,
+                dataType: "json",
+                success: function (data) {
+                    if (data.success) {
+                        $("#modal-add").modal('hide');
+                        $('#dg').twbsDatagrid('reload');
+                    } else {
+                        if (data.msg) {
+                            alert(data.msg);
+                        } else {
+                            alert("服务器正忙，请稍后再试。");
+                        }
+                    }
+                }
+            });
+        } else {
+            alert("您输入的太多了")
+        }
+    }
+
+    /*]]>*/
+</script>
 
 </html>

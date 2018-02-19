@@ -2,10 +2,8 @@ package com.tom.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.tom.model.User;
-import com.tom.model.UserRole;
-import com.tom.service.UserRoleService;
-import com.tom.service.UserService;
+import com.tom.model.Article;
+import com.tom.service.ArticleService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,21 +15,19 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class UserController {
+public class ArticleController {
 
     @Autowired
-    private UserService userService;
-    @Autowired
-    private UserRoleService userRoleService;
+    private ArticleService articleService;
 
-    @GetMapping("/users")
+    @GetMapping("/articles")
     public Map<String, Object> data(Integer page, Integer rows, String param) {
         Map<String, Object> result = new HashMap<>();
         try {
             PageHelper.startPage(page, rows);
-            List<User> users = userService.findUsers();
-            PageInfo pageInfo = new PageInfo(users);
-            result.put("datas", users);
+            List<Article> articles = articleService.findArticles();
+            PageInfo pageInfo = new PageInfo(articles);
+            result.put("datas", articles);
             result.put("total", pageInfo.getTotal());
             result.put("success", true);
         } catch (Exception e) {
@@ -41,11 +37,11 @@ public class UserController {
         return result;
     }
 
-    @GetMapping("/user")
+    @GetMapping("/article")
     public Map<String, Object> get(Integer id) {
         Map<String, Object> map = new HashMap<>();
         try {
-            map.put("data", userService.get(id));
+            map.put("data", articleService.get(id));
             map.put("success", true);
         } catch (Exception e) {
             map.put("success", false);
@@ -54,36 +50,13 @@ public class UserController {
         return map;
     }
 
-    @PostMapping("/user")
-    public Map<String, Object> add(User user) {
+    @PostMapping("/article")
+    public Map<String, Object> add(Article article) {
         Map<String, Object> map = new HashMap<>();
         try {
-            if (userService.findByUsername(user.getUsername()) == null) {
-                userService.insert(user);
-                UserRole userRole = new UserRole();
-                userRole.setUserId(user.getId());
-                userRole.setRoleId(2);
-                userRoleService.insert(userRole);
-                map.put("success", true);
-                map.put("id", user.getId());
-            } else {
-                map.put("success", false);
-                map.put("msg", "用户名已存在！");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            map.put("success", false);
-        }
-        return map;
-    }
-
-    @PutMapping("/user")
-    public Map<String, Object> update(User user) {
-        Map<String, Object> map = new HashMap<>();
-        try {
-            userService.updateSelective(user);
+            articleService.insert(article);
             map.put("success", true);
-            map.put("id", user.getId());
+            map.put("id", article.getId());
         } catch (Exception e) {
             e.printStackTrace();
             map.put("success", false);
@@ -91,11 +64,25 @@ public class UserController {
         return map;
     }
 
-    @DeleteMapping("/user")
+    @PutMapping("/article")
+    public Map<String, Object> update(Article article) {
+        Map<String, Object> map = new HashMap<>();
+        try {
+            articleService.updateSelective(article);
+            map.put("success", true);
+            map.put("id", article.getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+        }
+        return map;
+    }
+
+    @DeleteMapping("/article")
     public Map<String, Object> delete(Integer id) {
         Map<String, Object> map = new HashMap<>();
         try {
-            userService.delete(id);
+            articleService.delete(id);
             map.put("success", true);
         } catch (Exception e) {
             e.printStackTrace();

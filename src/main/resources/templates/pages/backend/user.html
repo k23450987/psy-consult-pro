@@ -14,87 +14,102 @@
 <!-- Page Content -->
 <!-- ============================================================== -->
 <div id="page-wrapper">
-    <div class="col-sm-12">
-        <div class="content-wrap">
-            <div class="p-20 row">
-                <div class="col-sm-6">
-                    <h2 class="m-t-0">用户管理</h2></div>
-                <div class="col-sm-6">
-                    <ul class="side-icon-text pull-right">
-                        <li><a href="javascript:void(0)" onclick="user_add()"><span
-                            class="circle circle-sm bg-success di"><i
-                            class="ti-plus"></i></span><span>添加用户</span></a>
-                        </li>
-                    </ul>
-                </div>
+    <div class="container-fluid">
+        <div class="row bg-title">
+            <!-- .page title -->
+            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                <h4 class="page-title">用户管理</h4>
             </div>
         </div>
-    </div>
-    <div class="col-sm-12">
-        <div class="table-responsive">
-            <table id="dg" class="table table-bordered table-striped"></table>
-        </div>
-    </div>
-    <div class="col-sm-12">
-        <nav class="text-right">
-            <ul id="dg-pagination" class="pagination"></ul>
-        </nav>
-    </div>
-    <!-- 模态框 -->
-    <!-- 添加记录 -->
-    <div class="modal fade" id="modal-add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel"><i class="icon-list-alt"></i> 添加用户</h4>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="content-wrap">
+                    <div class="p-20 row">
+                        <div class="col-sm-6">
+                            <h2 class="m-t-0">用户管理</h2></div>
+                        <div class="col-sm-6">
+                            <ul class="side-icon-text pull-right">
+                                <li>
+                                    <a href="javascript:void(0)" onclick="user_add()"><span class="circle circle-sm bg-success di"><i class="ti-plus"></i></span><span>新增用户</span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <form id="form-user" class="form-horizontal">
-                        <input id="id" name="id" type="hidden"/>
-                        <div class="form-group">
-                            <label class="col-md-12" for="username">用户名</label>
-                            <div class="col-md-12">
-                                <input type="text" id="username" name="username" class="form-control" placeholder="请输入用户名"/> </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-12" for="password">密码</label>
-                            <div class="col-md-12">
-                                <input id="password" name="password" type="password" class="form-control" placeholder="请输入密码"/> </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-12" for="name">姓名</label>
-                            <div class="col-md-12">
-                                <input type="email" id="name" name="name" class="form-control" placeholder="请输入姓名"/> </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-12">性别</label>
-                            <div class="col-sm-12">
-                                <select class="form-control" id="sex" name="sex">
-                                    <option value="1">男</option>
-                                    <option value="2">女</option>
-                                </select>
+            </div>
+            <div class="col-sm-12">
+                <div class="table-responsive">
+                    <table id="dg" class="table color-table inverse-table table-bordered table-striped"></table>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <nav class="text-right">
+                    <ul id="dg-pagination" class="pagination"></ul>
+                </nav>
+            </div>
+        </div>
+        <!-- 模态框 -->
+        <!-- 添加记录 -->
+        <div class="modal fade" id="modal-add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel"><i
+                            class="icon-list-alt"></i> <span id="modal-title">新增用户</span>
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="form-user" class="form-horizontal" onsubmit="return false">
+                            <input id="id" name="id" type="hidden"/>
+                            <div class="form-group">
+                                <label class="col-md-12" for="username">用户名</label>
+                                <div class="col-md-12">
+                                    <input type="text" id="username" name="username" class="form-control" placeholder="请输入用户名"/>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-12" for="age">年龄</label>
-                            <div class="col-md-12">
-                                <input type="email" id="age" name="age" class="form-control" placeholder="请输入年龄"/> </div>
-                        </div>
-                        <!--<div class="form-group">-->
+                            <div class="form-group">
+                                <label class="col-md-12" for="password">密码</label>
+                                <div class="col-md-12">
+                                    <input id="password" name="password" type="password" class="form-control" placeholder="请输入密码"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-12" for="name">姓名</label>
+                                <div class="col-md-12">
+                                    <input type="email" id="name" name="name" class="form-control" placeholder="请输入姓名"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-12">性别</label>
+                                <div class="col-sm-12">
+                                    <select class="form-control" id="sex" name="sex">
+                                        <option value="1">男</option>
+                                        <option value="2">女</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-12" for="age">年龄</label>
+                                <div class="col-md-12">
+                                    <input type="email" id="age" name="age" class="form-control" placeholder="请输入年龄"/>
+                                </div>
+                            </div>
+                            <!--<div class="form-group">-->
                             <!--<label class="col-sm-12">用户角色</label>-->
                             <!--<div class="col-sm-12">-->
-                                <!--<select class="form-control" name="role" id="role">-->
-                                    <!--<option value="1">管理员</option>-->
-                                    <!--<option value="2">普通用户</option>-->
-                                <!--</select>-->
+                            <!--<select class="form-control" name="role" id="role">-->
+                            <!--<option value="1">管理员</option>-->
+                            <!--<option value="2">普通用户</option>-->
+                            <!--</select>-->
                             <!--</div>-->
-                        <!--</div>-->
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary" onclick="user_save()">确定</button>
+                            <!--</div>-->
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" onclick="user_save()">确定</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -165,6 +180,8 @@
 
     function user_add() {
         $("#form-user")[0].reset();
+        $("#modal-title").text("新增用户");
+        $("#username").prop('disabled', false);
         $("#modal-add").modal('show');
     }
 
@@ -177,7 +194,7 @@
                     url: [[@{/user}]],
                     data: obj,
                     dataType: "json",
-                        success: function (data) {
+                    success: function (data) {
                         if (data.success) {
                             $("#modal-add").modal('hide');
                             $('#dg').twbsDatagrid('reload');
@@ -194,7 +211,7 @@
                 alert("请确认信息填写完整！");
             }
         } else {
-            if (obj.username && obj.password && obj.name) {
+            if (obj.password && obj.name) {
                 $.ajax({
                     type: "PUT",
                     url: [[@{/user}]],
@@ -224,12 +241,14 @@
             type: "GET",
             url: [[@{/user?id=}]] + id,
             dataType: "json",
-                success: function (data) {
+            success: function (data) {
                 if (data.success) {
                     var obj = data.data;
                     for (var name in obj) {
                         $('#form-user').find('[name="' + name + '"]').val(obj[name]);
                     }
+                    $("#username").prop('disabled', true);
+                    $("#modal-title").text("编辑用户");
                     $("#modal-add").modal('show');
                 }
             }
