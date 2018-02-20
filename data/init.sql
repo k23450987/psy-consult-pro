@@ -12,6 +12,10 @@ MySQL - 5.5.27 : Database - psy-consult-pro
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`psy-consult-pro` /*!40100 DEFAULT CHARACTER SET utf8 */;
+
+USE `psy-consult-pro`;
+
 /*Table structure for table `article` */
 
 DROP TABLE IF EXISTS `article`;
@@ -26,6 +30,24 @@ CREATE TABLE `article` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `article` */
+
+/*Table structure for table `option` */
+
+DROP TABLE IF EXISTS `option`;
+
+CREATE TABLE `option` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `quizId` int(11) DEFAULT NULL,
+  `text` varchar(255) DEFAULT NULL,
+  `nextQuizId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_quizId_option_quiz` (`quizId`),
+  KEY `FK_nextQuizId_option_quiz` (`nextQuizId`),
+  CONSTRAINT `FK_nextQuizId_option_quiz` FOREIGN KEY (`nextQuizId`) REFERENCES `quiz` (`id`),
+  CONSTRAINT `FK_quizId_option_quiz` FOREIGN KEY (`quizId`) REFERENCES `quiz` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `option` */
 
 /*Table structure for table `question` */
 
@@ -45,15 +67,28 @@ CREATE TABLE `question` (
 
 /*Data for the table `question` */
 
+/*Table structure for table `quiz` */
+
+DROP TABLE IF EXISTS `quiz`;
+
+CREATE TABLE `quiz` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) DEFAULT NULL,
+  `flag` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `quiz` */
+
 /*Table structure for table `role` */
 
 DROP TABLE IF EXISTS `role`;
 
 CREATE TABLE `role` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Data for the table `role` */
 
@@ -67,18 +102,18 @@ DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(15) COLLATE utf8_bin DEFAULT NULL,
-  `password` varchar(32) COLLATE utf8_bin DEFAULT NULL,
-  `name` varchar(16) COLLATE utf8_bin DEFAULT NULL,
+  `username` varchar(15) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `password` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `name` varchar(16) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
   `sex` int(11) DEFAULT NULL,
   `age` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 /*Data for the table `user` */
 
 insert  into `user`(`id`,`username`,`password`,`name`,`sex`,`age`) values 
-(1,'admin','admin',NULL,NULL,NULL);
+(1,'admin','admin','管理员',1,10);
 
 /*Table structure for table `user_role` */
 
@@ -93,7 +128,7 @@ CREATE TABLE `user_role` (
   KEY `FK_role_id` (`role_id`),
   CONSTRAINT `FK_role_id` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE,
   CONSTRAINT `FK_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 /*Data for the table `user_role` */
 

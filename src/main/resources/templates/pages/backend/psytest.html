@@ -14,7 +14,140 @@
 <!-- Page Content -->
 <!-- ============================================================== -->
 <div id="page-wrapper">
-
+    <div class="container-fluid">
+        <div class="row bg-title">
+            <!-- .page title -->
+            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                <h4 class="page-title">心理测评问题管理</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="content-wrap">
+                    <div class="p-20 row">
+                        <div class="col-sm-6">
+                            <h2 class="m-t-0">心理测评问题管理</h2>
+                        </div>
+                        <div class="col-sm-6">
+                            <ul class="side-icon-text pull-right">
+                                <li>
+                                    <a href="javascript:void(0)" onclick="quiz_add()"><span class="circle circle-sm bg-success di"><i class="ti-plus"></i></span><span>新增测评问题</span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="table-responsive">
+                    <table id="dg" class="table color-table inverse-table table-bordered table-striped"></table>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <nav class="text-right">
+                    <ul id="dg-pagination" class="pagination"></ul>
+                </nav>
+            </div>
+        </div>
+        <!-- 模态框 -->
+        <!-- 添加记录 -->
+        <div class="modal fade" id="modal-quiz-add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            <i class="icon-list-alt"></i> <span id="modal-quiz-title">新增问题</span>
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="form-quiz" class="form-horizontal" onsubmit="return false">
+                            <input id="id" name="id" type="hidden"/>
+                            <div class="form-group">
+                                <label class="col-md-12" for="title">题目</label>
+                                <div class="col-md-12">
+                                    <input type="text" id="title" name="title" class="form-control" placeholder="请输入题目"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <span class="col-md-12">
+                                    <input id="flag" name="flag" type="checkbox"/> 第一题
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" onclick="quiz_save()">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 问题选项列表 -->
+        <div class="modal fade" id="modal-option-list" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel2"><i
+                            class="icon-list-alt"></i> <span id="modal-title">选项列表</span>
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table color-table inverse-table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>选项描述</th>
+                                <th>下一题目编号</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="option-list-tbody"></tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 添加问题选项 -->
+        <div class="modal fade" id="modal-option-add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel1"><i
+                            class="icon-list-alt"></i> <span id="modal-opt-title">新增问题选项</span>
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="form-opt" class="form-horizontal" onsubmit="return false">
+                            <input id="opt_id" name="id" type="hidden"/>
+                            <input id="quizId" name="quizId" type="hidden"/>
+                            <div class="form-group">
+                                <label class="col-md-12" for="opt_text">选项</label>
+                                <div class="col-md-12">
+                                    <input type="text" id="opt_text" name="text" class="form-control" placeholder="请输入该选项的文字描述"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-12">选择下一题</label>
+                                <div class="col-sm-12">
+                                    <select class="form-control" id="opt_nextQuizId" name="nextQuizId">
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" onclick="opt_save()">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- /.container-fluid -->
     <footer class="footer text-center"> 2017 &copy; 版权所有</footer>
 </div>
@@ -22,5 +155,307 @@
 <!-- End Page Content -->
 <!-- ============================================================== -->
 </body>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    var quizId = "";
+
+    $('#modal-option-add').on('show.bs.modal', function (e) {
+        $.ajax({
+            type: "GET",
+            url: /*[[@{/quizsWithTitle}]]*/ + '/quizsWithTitle',
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                if (data.success) {
+                    $("#opt_nextQuizId").html(data.datas);
+                }
+            }
+        });
+    });
+
+    $('#modal-option-add').on('hidden.bs.modal', function (e) {
+        $("#form-opt")[0].reset();
+        $("#opt_nextQuizId").html("");
+    });
+
+    $(function () {
+        $('#dg').twbsDatagrid({
+            method: 'get',
+            pageSize: 10,
+            url: /*[[@{/quizs}]]*/ + '/quizs',
+            columns: [{
+                field: 'id',
+                title: '问题编号'
+            }, {
+                field: 'title',
+                title: '题目'
+            }, {
+                field: 'flag',
+                title: '是否是第一题',
+                formatter: function (val, row) {
+                    if (row.flag) {
+                        return "是";
+                    } else {
+                        return "否";
+                    }
+                }
+            }, {
+                field: 'operation',
+                title: '操作',
+                formatter: function (val, row) {
+                    // 拼接html
+                    var btns = '';
+                    // btns += '<a href="' + [[@{/question?id=}]] + row.id + '" class="label label-info m-r-5">编辑</a>';
+                    btns += '<a href="javascript:void(0)" class="label label-info m-r-5" onclick="quiz_info(' + row.id + ')">编辑</a>';
+                    btns += '<a href="javascript:void(0)" class="label label-danger m-r-5" onclick="quiz_del(' + row.id + ')">删除</a>';
+                    btns += '<a href="javascript:void(0)" class="label label-success m-r-5" onclick="quiz_opt(' + row.id + ')">新增选项</a>';
+                    btns += '<a href="javascript:void(0)" class="label label-warning m-r-5" onclick="opt_list(' + row.id + ')">管理选项</a>';
+                    return btns;
+                }
+            }]
+        });
+    });
+
+    function quiz_add() {
+        $("#form-quiz")[0].reset();
+        $("#modal-quiz-title").text("新增问题");
+        $("#modal-quiz-add").modal('show');
+    }
+
+    function quiz_info(id) {
+        $.ajax({
+            type: "GET",
+            url: [[@{/quiz?id=}]] + id,
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    var obj = data.data;
+                    $('#id').val(obj.id);
+                    $('#title').val(obj.title);
+                    $('#flag').prop("checked", obj.flag);
+                    $("#modal-quiz-title").text("编辑问题");
+                    $("#modal-quiz-add").modal('show');
+                } else {
+                    alert("服务器正忙，请稍后再试。");
+                }
+            }
+        });
+    }
+
+    function quiz_del(id) {
+        $.ajax({
+            type: "DELETE",
+            url: [[@{/quiz?id=}]] + id,
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    $('#dg').twbsDatagrid('reload');
+                } else {
+                    if (data.msg) {
+                        alert(data.msg);
+                    } else {
+                        alert("服务器正忙，请稍后再试。");
+                    }
+                }
+            }
+        });
+    }
+
+    function quiz_save() {
+        var obj = {
+            "id": $('#id').val(),
+            "title": $('#title').val(),
+            "flag": $('#flag').prop("checked")
+        };
+        if (!obj.id) {
+            if (obj.title) {
+                $.ajax({
+                    type: "POST",
+                    url: [[@{/quiz}]],
+                    data: obj,
+                        dataType: "json",
+                        success: function (data) {
+                        if (data.success) {
+                            $("#modal-quiz-add").modal('hide');
+                            $('#dg').twbsDatagrid('reload');
+                        } else {
+                            if (data.msg) {
+                                alert(data.msg);
+                            } else {
+                                alert("服务器正忙，请稍后再试。");
+                            }
+                        }
+                    }
+                });
+            } else {
+                alert("请输入问题题目！");
+            }
+        } else {
+            if (obj.title) {
+                $.ajax({
+                    type: "PUT",
+                    url: [[@{/quiz}]],
+                    data: obj,
+                        dataType: "json",
+                        success: function (data) {
+                        if (data.success) {
+                            $("#modal-quiz-add").modal('hide');
+                            $('#dg').twbsDatagrid('reload');
+                        } else {
+                            if (data.msg) {
+                                alert(data.msg);
+                            } else {
+                                alert("服务器正忙，请稍后再试。");
+                            }
+                        }
+                    }
+                });
+            } else {
+                alert("请输入问题题目！");
+            }
+        }
+    }
+
+    function quiz_opt(id) {
+        $("#quizId").val(id);
+        $("#modal-opt-title").text("新增问题选项");
+        $('#modal-option-add').modal('show');
+    }
+
+    function opt_save() {
+        var obj = $('#form-opt').serializeObject();
+        if (!obj.id) {
+            if (obj.text && obj.nextQuizId) {
+                $.ajax({
+                    type: "POST",
+                    url: [[@{/option}]],
+                    data: obj,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.success) {
+                            $("#modal-option-add").modal('hide');
+                            $('#dg').twbsDatagrid('reload');
+                        } else {
+                            if (data.msg) {
+                                alert(data.msg);
+                            } else {
+                                alert("服务器正忙，请稍后再试。");
+                            }
+                        }
+                    }
+                });
+            } else {
+                alert("请确认信息填写完整！");
+            }
+        } else {
+            if (obj.text && obj.nextQuizId) {
+                $.ajax({
+                    type: "PUT",
+                    url: [[@{/option}]],
+                    data: obj,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.success) {
+                            init_opt_list();
+                            $("#modal-option-add").modal('hide');
+                            $('#dg').twbsDatagrid('reload');
+                        } else {
+                            if (data.msg) {
+                                alert(data.msg);
+                            } else {
+                                alert("服务器正忙，请稍后再试。");
+                            }
+                        }
+                    }
+                });
+            } else {
+                alert("请确认信息填写完整！");
+            }
+        }
+    }
+
+    function opt_list(id) {
+        quizId = id;
+        init_opt_list();
+        $("#modal-option-list").modal('show');
+    }
+
+    function init_opt_list() {
+        $("#option-list-tbody").html("");
+        $.ajax({
+            type: "GET",
+            url: [[@{/findOptionsByQuizId}]] + '?quizId=' + quizId,
+            dataType: "json",
+                success: function (data) {
+                if (data.success) {
+                    var arr = data.datas;
+                    if (arr.length > 0) {
+                        for (var i in arr) {
+                            var str = "<tr>";
+                            str += "<td>" + arr[i].text + "</td>";
+                            str += "<td>" + arr[i].nextQuizId + "</td>";
+                            str += "<td>";
+                            str += '<a href="javascript:void(0)" class="label label-info m-r-5" onclick="opt_info(' + arr[i].id + ')">编辑</a>';
+                            str += '<a href="javascript:void(0)" class="label label-danger m-r-5" onclick="opt_del(' + arr[i].id + ')">删除</a>';
+                            str += "</td>";
+                            str += "</tr>";
+                            $("#option-list-tbody").append(str);
+                        }
+                    }
+                } else {
+                    if (data.msg) {
+                        alert(data.msg);
+                    } else {
+                        alert("服务器正忙，请稍后再试。");
+                    }
+                }
+            }
+        });
+    }
+
+    function opt_del(id) {
+        $.ajax({
+            type: "DELETE",
+            url: [[@{/option?id=}]] + id,
+            dataType: "json",
+                success: function (data) {
+                if (data.success) {
+                    init_opt_list();
+                } else {
+                    if (data.msg) {
+                        alert(data.msg);
+                    } else {
+                        alert("服务器正忙，请稍后再试。");
+                    }
+                }
+            }
+        });
+    }
+
+    function opt_info(id) {
+        $.ajax({
+            type: "GET",
+            url: [[@{/option?id=}]] + id,
+            dataType: "json",
+                success: function (data) {
+                if (data.success) {
+                    var obj = data.data;
+                    $('#opt_id').val(obj.id);
+                    $('#quizId').val(obj.quizId);
+                    $('#opt_text').val(obj.text);
+                    $('#modal-opt-title').text("编辑问题选项");
+                    $('#modal-option-add').modal('show');
+                    $('#opt_nextQuizId').val(obj.nextQuizId);
+                } else {
+                    alert("服务器正忙，请稍后再试。");
+                }
+            }
+        });
+    }
+
+    /*]]>*/
+</script>
 
 </html>

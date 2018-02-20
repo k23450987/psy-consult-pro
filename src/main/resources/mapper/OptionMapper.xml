@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tom.dao.OptionMapper">
+
+    <resultMap id="BaseResultMap" type="com.tom.model.Option">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="quizId" property="quizId" jdbcType="INTEGER"/>
+        <result column="text" property="text" jdbcType="VARCHAR"/>
+        <result column="nextQuizId" property="nextQuizId" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, quizId, `text`, nextQuizId
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from `option`
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        DELETE FROM `option`
+        WHERE id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="Option" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `option` (quizId, text, nextQuizId)
+        VALUES (#{quizId,jdbcType=INTEGER}, #{text,jdbcType=VARCHAR},
+        #{nextQuizId,jdbcType=INTEGER})
+    </insert>
+
+    <insert id="insertSelective" parameterType="Option"  useGeneratedKeys="true" keyProperty="id">
+        insert into `option`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="quizId != null">
+                quizId,
+            </if>
+            <if test="text != null">
+                `text`,
+            </if>
+            <if test="nextQuizId != null">
+                nextQuizId,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="quizId != null">
+                #{quizId,jdbcType=INTEGER},
+            </if>
+            <if test="text != null">
+                #{text,jdbcType=VARCHAR},
+            </if>
+            <if test="nextQuizId != null">
+                #{nextQuizId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="Option">
+        update `option`
+        <set>
+            <if test="quizId != null">
+                quizId = #{quizId,jdbcType=INTEGER},
+            </if>
+            <if test="text != null">
+                `text` = #{text,jdbcType=VARCHAR},
+            </if>
+            <if test="nextQuizId != null">
+                nextQuizId = #{nextQuizId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="Option">
+        UPDATE `option`
+        SET quizId = #{quizId,jdbcType=INTEGER},
+        text = #{text,jdbcType=VARCHAR},
+        nextQuizId = #{nextQuizId,jdbcType=INTEGER}
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="findOptions" resultMap="BaseResultMap" parameterType="Option">
+        select
+        <include refid="Base_Column_List"/>
+        from `option`
+        <where>
+            <if test="id != null">
+                and id = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="quizId != null">
+                and quizId = #{quizId,jdbcType=INTEGER}
+            </if>
+            <if test="text != null">
+                and `text` = #{text,jdbcType=VARCHAR}
+            </if>
+            <if test="nextQuizId != null">
+                and nextQuizId = #{nextQuizId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+    <select id="findOptionsByQuizId" resultMap="BaseResultMap" parameterType="int">
+        select
+        <include refid="Base_Column_List"/>
+        from `option`
+        <where>
+            quizId = #{quizId,jdbcType=INTEGER}
+        </where>
+    </select>
+
+</mapper>

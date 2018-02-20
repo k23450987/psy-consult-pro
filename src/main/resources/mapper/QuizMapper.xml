@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tom.dao.QuizMapper">
+
+    <resultMap id="BaseResultMap" type="com.tom.model.Quiz">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="flag" property="flag" jdbcType="BIT"/>
+    </resultMap>
+
+    <resultMap id="QuizResultMap" type="com.tom.model.Quiz">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="flag" property="flag" jdbcType="BIT"/>
+        <collection property="optionList" ofType="com.tom.model.Option">
+            <id property="id" column="opt_id"/>
+            <result property="text" column="text"/>
+            <result property="nextQuizId" column="nextQuizId"/>
+        </collection>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, title, flag
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from quiz
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        DELETE FROM quiz
+        WHERE id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="Quiz" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO quiz (title, flag)
+        VALUES (#{title,jdbcType=VARCHAR}, #{flag,jdbcType=BIT})
+    </insert>
+
+    <insert id="insertSelective" parameterType="Quiz" useGeneratedKeys="true" keyProperty="id">
+        insert into quiz
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">
+                title,
+            </if>
+            <if test="flag != null">
+                flag,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="flag != null">
+                #{flag,jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="Quiz">
+        update quiz
+        <set>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="flag != null">
+                flag = #{flag,jdbcType=BIT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="Quiz">
+        UPDATE quiz
+        SET title = #{title,jdbcType=VARCHAR},
+            flag  = #{flag,jdbcType=BIT}
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="getQuiz" resultMap="QuizResultMap" parameterType="int">
+        SELECT
+            q.id,
+            q.title,
+            q.flag,
+            o.id AS opt_id,
+            o.text,
+            o.nextQuizId
+        FROM
+            `quiz` q
+        LEFT JOIN `option` o
+            ON q.`id` = o.`quizId`
+        <where>
+            q.`id` = #{id}
+        </where>
+    </select>
+
+    <select id="findQuizs" resultMap="BaseResultMap" parameterType="Quiz">
+        select
+        <include refid="Base_Column_List"/>
+        from quiz
+        <where>
+            <if test="id != null">
+                and id = #{td,jdbcType=VARCHAR}
+            </if>
+            <if test="title != null">
+                and title = #{title,jdbcType=VARCHAR}
+            </if>
+            <if test="flag != null">
+                and flag = #{flag,jdbcType=BIT}
+            </if>
+        </where>
+    </select>
+
+</mapper>
