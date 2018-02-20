@@ -66,6 +66,7 @@ public class OptionController {
             Option vo = new Option();
             vo.setQuizId(option.getQuizId());
             List<Option> options = optionService.findOptions(vo);
+            // 判断测评问题的选项个数不超过4个
             if (options.size() >= 4) {
                 map.put("success", false);
                 map.put("msg", "一个问题最多只能拥有4个选项，请在选项管理中删除多余选项。");

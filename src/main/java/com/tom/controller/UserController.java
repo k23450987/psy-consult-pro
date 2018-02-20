@@ -58,6 +58,7 @@ public class UserController {
     public Map<String, Object> add(User user) {
         Map<String, Object> map = new HashMap<>();
         try {
+            // 判断用户名重复的问题
             if (userService.findByUsername(user.getUsername()) == null) {
                 userService.insert(user);
                 UserRole userRole = new UserRole();

@@ -13,7 +13,7 @@ import lombok.ToString;
 public class Option {
 
     private Integer id;
-    private Integer quizId;
-    private String text;
-    private Integer nextQuizId;
+    private Integer quizId;      // 所属问题 ID
+    private String text;         // 选项内容
+    private Integer nextQuizId;  // 点击该选项后跳转到的题目
 }

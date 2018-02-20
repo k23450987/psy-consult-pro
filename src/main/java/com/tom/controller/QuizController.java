@@ -5,7 +5,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.tom.model.Quiz;
 import com.tom.service.QuizService;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +40,10 @@ public class QuizController {
         return result;
     }
 
+    /**
+     * 这个方法会将所有的问题拼接成 &lt;option&gt;
+     * 以便于在编辑问题选项时选择要跳转的问题
+     */
     @GetMapping("/quizsWithTitle")
     public Map<String, Object> data(String param) {
         Map<String, Object> result = new HashMap<>();
@@ -53,9 +56,9 @@ public class QuizController {
                     sb.append("<option value=\"")
                         .append(obj.getId())
                         .append("\">")
-                        .append(obj.getId())
+                        .append(obj.getId())    // 问题编号
                         .append(".")
-                        .append(obj.getTitle())
+                        .append(obj.getTitle()) // 问题标题
                         .append("</option>");
                 }
             }
@@ -86,9 +89,11 @@ public class QuizController {
         Map<String, Object> map = new HashMap<>();
         try {
             if (quiz.getFlag()) {
+                // 当前操作要将这一题作为第一题展示
                 Quiz vo = new Quiz();
                 vo.setFlag(true);
                 List<Quiz> quizs = quizService.findQuizs(vo);
+                // 判断是否已经存在第一题了
                 if (quizs.size() > 0) {
                     map.put("success", false);
                     map.put("msg", "只能有一个第一题，当前的第一题编号为 " + quizs.get(0).getId());
@@ -113,10 +118,12 @@ public class QuizController {
     public Map<String, Object> update(Quiz quiz) {
         Map<String, Object> map = new HashMap<>();
         try {
+            // 当前操作要将这一题作为第一题展示
             if (quiz.getFlag()) {
                 Quiz vo = new Quiz();
                 vo.setFlag(true);
                 List<Quiz> quizs = quizService.findQuizs(vo);
+                // 判断是否已经存在第一题了，或者当前题目就是第一题
                 if (quizs.size() > 0 && !Objects.equals(quizs.get(0).getId(), quiz.getId())) {
                     map.put("success", false);
                     map.put("msg", "只能有一个第一题，当前的第一题编号为 " + quizs.get(0).getId());

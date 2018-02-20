@@ -20,6 +20,7 @@ public class IndexController {
 
     @GetMapping("/login")
     public String login(HttpSession session, Model model) {
+        // 提取登录错误信息，并从 session 中删除（为了只显示一次错误信息）
         Object lastException = session.getAttribute("SPRING_SECURITY_LAST_EXCEPTION");
         if (lastException != null) {
             model.addAttribute("error", "error");
