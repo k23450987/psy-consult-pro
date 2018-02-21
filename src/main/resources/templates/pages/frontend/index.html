@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="layout/frontend/header"/>
+</head>
+<body class="homepage">
+
+<th:block th:replace="layout/frontend/common"/>
+
+<!-- Main -->
+<div id="main-wrapper">
+
+    <div id="banner">
+        <div class="container">
+            <div class="row">
+                <section>
+                    <img class="image full" src="images/pics01.jpg" th:src="@{/images/pics01.jpg}"/>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="main">
+            <div class="row" th:each="article, articleStat : ${articles}">
+                <!-- Content -->
+                <div th:id="'content' + ${article.id}" class="12u skel-cell-important">
+                    <section>
+                        <header>
+                            <h2 th:text="${article.title}">题目</h2>
+                            <span class="byline" th:text="'发布时间： ' + ${#dates.format(article.releaseDate, 'yyyy-MM-dd HH:mm:ss')}">显示详情</span>
+                            <span th:text="'点击数： ' + ${article.clickTime}">点击数</span>
+                        </header>
+                        <a th:href="@{/read/article/} + ${article.id}" class="button">阅读</a>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- /Main -->
+
+<!-- Copyright -->
+<div id="copyright">
+    <div class="container"> 2017 &copy; 版权所有</div>
+</div>
+
+</div>
+</body>
+</html>

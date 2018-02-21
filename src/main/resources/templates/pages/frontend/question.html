@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="layout/frontend/header"/>
+</head>
+<body class="homepage">
+
+<th:block th:replace="layout/frontend/common"/>
+
+<!-- Main -->
+<div id="main-wrapper">
+
+    <div class="container">
+        <div id="main">
+            <div class="row" th:each="question, questionStat : ${questions}">
+                <!-- Content -->
+                <div th:id="'content' + ${question.id}" class="12u skel-cell-important">
+                    <span style="font-size: 30px" th:text="${question.title}">题目</span>
+                    <br/>
+                    <br/>
+                    提问时间 <span th:text="${#dates.format(question.askDate, 'yyyy-MM-dd HH:mm:ss')}">问题内容</span>
+                    <br/>
+                    <br/>
+                    <span th:text="${question.content}">问题内容</span>
+                    <br/>
+                    <br/>
+                    <span><h3>管理员回复：</h3></span>
+                    <br/>
+                    <span th:if="${question.answer} ne null and ${question.answer} ne ''">
+                        <span th:text="${question.answer}">管理员回复</span>
+                    </span>
+                    <span th:unless="${question.answer} ne null and ${question.answer} ne ''">
+                        <span>暂无回复，请耐心等待</span>
+                    </span>
+                </div>
+            </div>
+            <div class="row">
+            <div class="12u skel-cell-important">
+                <section>
+                    <header>
+                        <span class="byline">我要提问</span>
+                        <div><input type="text" id="ask-title" style="width: 600px" placeholder="问题题目"/></div>
+                        <br/>
+                        <div><textarea id="ask-content" style="resize: none;width: 600px;height: 160px" placeholder="最多可输入100字" oninput="changeTextCount()"></textarea></div>
+                        <div>
+                            <span id="text-count">0</span>/100
+                        </div>
+                        <a href="javascript:void(0)" class="button" onclick="question_ask()">提问</a>
+                    </header>
+                </section>
+            </div>
+            </div>
+        </div>
+    </div>
+<!-- /Main -->
+
+<!-- Copyright -->
+<div id="copyright">
+    <div class="container"> 2017 &copy; 版权所有</div>
+</div>
+
+</div>
+</body>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    function changeTextCount() {
+        var len = $("#ask-content").val().length;
+        $('#text-count').text(len);
+    }
+
+    function question_ask() {
+        var obj = {
+            "title": $('#ask-title').val(),
+            "content": $('#ask-content').val(),
+            "askDate": new Date()
+        };
+        if (obj.content.length <= 100) {
+            $.ajax({
+                type: "POST",
+                url: [[@{/askQuestion}]],
+                data: obj,
+                dataType: "json",
+                success: function (data) {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        if (data.msg) {
+                            alert(data.msg);
+                        } else {
+                            alert("服务器正忙，请稍后再试。");
+                        }
+                    }
+                }
+            });
+        } else {
+            alert("您输入的太多了")
+        }
+    }
+
+    /*]]>*/
+</script>
+</html>

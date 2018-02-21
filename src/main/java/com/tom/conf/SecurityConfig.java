@@ -33,6 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/images/**").permitAll()
             .antMatchers("/assets/**").permitAll()
             .antMatchers("/error/**").permitAll()
+            .antMatchers("/").permitAll()
             .anyRequest().authenticated()
             .and()
                 .formLogin()
@@ -41,6 +42,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
             .and()
                 .logout()
+                // 注销完成跳转首页
+                .logoutSuccessUrl("/")
                 .permitAll();
     }
 }

@@ -128,4 +128,29 @@
         <include refid="Base_Column_List"/>
         from question
     </select>
+
+    <select id="findQuestionsWithParam" resultMap="BaseResultMap" parameterType="Question">
+        select
+        <include refid="Base_Column_List"/>,
+        <include refid="Blob_Column_List"/>
+        from question
+        <where>
+            <if test="title != null">
+                and title = #{title,jdbcType=VARCHAR}
+            </if>
+            <if test="askDate != null">
+                and askDate = #{askDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="userId != null">
+                and userId = #{userId,jdbcType=INTEGER}
+            </if>
+            <if test="answer != null">
+                and answer = #{answer,jdbcType=VARCHAR}
+            </if>
+            <if test="content != null">
+                and content = #{content,jdbcType=LONGVARCHAR}
+            </if>
+        </where>
+    </select>
+
 </mapper>

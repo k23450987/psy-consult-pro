@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="layout/frontend/header"/>
+</head>
+<body class="homepage">
+
+<th:block th:replace="layout/frontend/common"/>
+
+<!-- Main -->
+<div id="main-wrapper">
+    <input type="hidden" id="articleId" th:value="${id}"/>
+
+    <div class="container">
+        <div id="main">
+            <div class="row">
+                <section>
+                    <header>
+                        <h2 id="title">No Sidebar</h2>
+                    </header>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <div id="content">
+
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+<!-- /Main -->
+
+<!-- Copyright -->
+<div id="copyright">
+    <div class="container"> 2017 &copy; 版权所有</div>
+</div>
+
+</div>
+</body>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(function(){
+        $.ajax({
+            type: "GET",
+            url: [[@{/article?id=}]] + $("#articleId").val(),
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    var obj = data.data;
+                    $("#title").text(obj.title);
+                    if (obj.content) {
+                        $("#content").html(Base64.decode(obj.content));
+                    }
+                }
+            }
+        });
+    });
+    /*]]>*/
+</script>
+</html>

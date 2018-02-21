@@ -24,4 +24,9 @@ public class QuestionServiceImpl extends BasicServiceImpl<Question> implements Q
     public List<Question> findQuestions() {
         return questionMapper.findQuestions();
     }
+
+    @Override
+    public List<Question> findQuestionsWithParam(Question record) {
+        return questionMapper.findQuestionsWithParam(record);
+    }
 }

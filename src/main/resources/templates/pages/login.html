@@ -1,50 +1,53 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <th:block th:replace="layout/header"/>
     <title>登录</title>
-    <th:block th:replace="layout/script"/>
+    <th:block th:replace="layout/backend/header"/>
 </head>
+
 <body>
-<div th:if="${error} ne null and ${error} ne ''">
-    <span style="color: red">用户名或密码错误</span>
+<!-- Preloader -->
+<div class="preloader">
+    <div class="cssload-speeding-wheel"></div>
 </div>
-<div>
-    <!-- thymeleaf 中的 contextPath 就是 @{/} -->
-    <form th:action="@{/login}" method="post">
-        <table>
-            <tr>
-                <td><label>用户名
-                    <input name="username" type="text"/>
-                </label></td>
-            </tr>
-            <tr>
-                <td><label>密码
-                    <input name="password" type="password"/>
-                </label></td>
-            </tr>
-            <tr>
-                <td><input type="submit" value="submit"/></td>
-            </tr>
-        </table>
-    </form>
-</div>
+<section id="wrapper" class="new-login-register">
+    <div class="lg-info-panel">
+        <div class="inner-panel">
+        </div>
+    </div>
+    <div class="new-login-box">
+        <div class="white-box">
+            <h2>登 录</h2>
+            <div th:if="${error} ne null and ${error} ne ''">
+                <small><span style="color: red">用户名或密码错误</span></small>
+            </div>
+            <form class="form-horizontal new-lg-form" id="loginform" action="index.html" th:action="@{/login}" method="post">
+                <div class="form-group  m-t-20">
+                    <div class="col-xs-12">
+                        <label>用户名</label>
+                        <input class="form-control" type="text" name="username" placeholder="请输入用户名"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <label>密码</label>
+                        <input class="form-control" type="password" name="password" placeholder="请输入密码"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                </div>
+                <div class="form-group text-center m-t-20">
+                    <div class="col-xs-12">
+                        <button class="btn btn-info btn-lg btn-block btn-rounded text-uppercase waves-effect waves-light" type="submit">登 录</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</section>
+
 </body>
-<!--
 
-    thymeleaf 内联 js 需要使用 th:inline="javascript
-
-    /*<![CDATA[*//*]]>*/ 是为了防止没有渲染模板的情况下浏览器无法正常打开 html
-
-<script th:inline="javascript">
-    /*<![CDATA[*/
-
-    $(function () {
-        alert("hello");
-    });
-
-    /*]]>*/
-</script>
-
--->
 </html>

@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="layout/frontend/header"/>
+</head>
+<body class="homepage">
+
+<th:block th:replace="layout/frontend/common"/>
+
+<!-- Main -->
+<div id="main-wrapper">
+
+    <div class="container">
+        <div id="main">
+            <div class="row">
+                <section>
+                    <header>
+                        <h2 id="title" th:text="${quiz.title}">No Sidebar</h2>
+                    </header>
+                    <br/>
+                    <div th:each="option : ${quiz.optionList}">
+                        <a th:href="@{/psytest/} + ${option.nextQuizId}" style="font-size: 20px" th:text="${option.text}"></a>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+<!-- /Main -->
+
+<!-- Copyright -->
+<div id="copyright">
+    <div class="container"> 2017 &copy; 版权所有</div>
+</div>
+
+</div>
+</body>
+</html>

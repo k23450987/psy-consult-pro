@@ -1,0 +1,34 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!-- Header -->
+<div id="header-wrapper">
+    <div id="header">
+        <div class="container">
+            <div id="logo"> <!-- Logo -->
+                <h1><a href="#" th:href="@{/}">心理咨询网站</a></h1>
+                <span>一个心理咨询网站</span>
+            </div>
+        </div>
+        <div id="menu-wrapper">
+            <div class="container">
+                <nav id="nav">
+                    <ul>
+                        <li><a th:href="@{/}">首页</a></li>
+                        <li><a th:href="@{/read/question}">心理咨询</a></li>
+                        <li><a th:href="@{/psytest}">心理测试</a></li>
+                        <span th:if="${username} ne null and ${username} ne ''">
+                            <li><a th:href="@{/logout}" th:inline="text">[[${username}]]/注销</a></li>
+                        </span>
+                        <span th:unless="${username} ne null and ${username} ne ''">
+                            <li><a th:href="@{/login}">登录</a></li>
+                        </span>
+                        <span sec:authorize="hasRole('ROLE_ADMIN')">
+                            <li><a th:href="@{/backend/index}">后台管理</a></li>
+                        </span>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Header -->
+</html>

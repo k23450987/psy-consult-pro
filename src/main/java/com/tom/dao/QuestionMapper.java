@@ -19,4 +19,10 @@ public interface QuestionMapper extends BasicMapper<Question> {
      * @return 问题列表
      */
     List<Question> findQuestions();
+
+    /**
+     * 条件查询所有问题
+     * @param record 传递的值对象
+     */
+    List<Question> findQuestionsWithParam(Question record);
 }
